@@ -161,4 +161,4 @@ struct Confirmation {
 	ack 	     bool
 }
 
-struc
+type Table = map[string]any
