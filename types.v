@@ -1,6 +1,11 @@
 module main
+import time
+import io
 
 // Constants for standard AMQP 0-9-1 exchange types.
+
+// 	bool, byte, i16, int, i64, f32, f64, string, []byte, Decimal, time.Time, None
+type Any = bool | byte | i16 | int | i64 | f32 | f64 | string | []byte | Decmical | time.Time | Table | None | []Any
 const (
 	exchange_direct  = "direct"
 	exchange_fanout  = "fanout"
@@ -70,7 +75,7 @@ pub fn (e AmqpError) error() string {
 
 // Used by header frames to capture routing and header information
 struct Properties {
-	content_type     string    // MIME content type
+	contenttype_     string    // MIME content type
 	content_encoding string    // MIME content encoding
 	headers          Table     // Application or header exchange table
 	delivery_mode    u8        // queue implementation use - Transient (1) or Persistent (2)
@@ -80,7 +85,7 @@ struct Properties {
 	expiration       string    // implementation use - message expiration spec
 	message_id       string    // application use - message identifier
 	timestamp        time.Time // application use - message timestamp
-	_type            string    // application use - message type name
+	type_            string    // application use - message type name
 	user_id          string    // application use - creating user id
 	app_id           string    // application use - creating application
 	reserved         string    // was cluster-id - process for buffer consumption
@@ -96,8 +101,8 @@ struct Properties {
 // delivery modes specific to custom queue implementations are not enumerated
 // here.
 const (
-	transient  = 1 as u8
-	persistent = 2 as u8
+	transient  = u8(1)
+	persistent = u8(2)
 )
 
 // The property flags are an array of bits that indicate the presence or
@@ -149,7 +154,7 @@ struct Publishing {
 	expiration       string    // message expiration spec
 	message_id       string    // message identifier
 	timestamp        time.Time // message timestamp
-	_type            string    // message type name
+	type_            string    // message type name
 	user_id          string    // creating user id - ex: "guest"
 	app_id           string    // creating application id
 	
@@ -161,4 +166,141 @@ struct Confirmation {
 	ack 	     bool
 }
 
-type Table = map[string]any
+struct Decmical {
+	scale u8
+	value int
+}
+
+type Table = map[string]Any
+
+struct None{}
+
+//  bool, byte, int, int16, int32, int64, float32, float64, string, []byte, Decimal, time.Time:
+// quote each word line up
+// "bool", "byte", "int", "int16", "int32", "int64", "float32", "float64", "string", "[]byte", "Decimal", "time.Time"
+
+pub fn validate_field(f Any) bool {
+	if f is Table {
+		for key, value in f {
+			if !validate_field(key) {
+				return false
+			}
+			if !validate_field(value) {
+				return false
+			}
+		}
+	} else if f is []Any {
+		for value in f {
+			if !validate_field(value) {
+				return false
+			}
+		}
+	}
+	return false
+}
+
+type TagSet = []u64
+
+// func (set tagSet) Len() int              { return len(set) }
+// func (set tagSet) Less(i, j int) bool    { return (set)[i] < (set)[j] }
+// func (set tagSet) Swap(i, j int)         { (set)[i], (set)[j] = (set)[j], (set)[i] }
+// func (set *tagSet) Push(tag interface{}) { *set = append(*set, tag.(uint64)) }
+// func (set *tagSet) Pop() interface{} {
+// 	val := (*set)[len(*set)-1]
+// 	*set = (*set)[:len(*set)-1]
+// 	return val
+// }
+
+pub fn (set TagSet) len() int {
+	return set.len()
+}
+
+pub fn (set TagSet) less(i int, j int) bool {
+	return (set)[i] < (set)[j]
+}
+
+pub fn (mut set TagSet) swap(i int, j int) {
+	i_val := set[i]
+	j_val := set[j]
+	set[i] = j_val
+	set[j] = i_val
+
+}
+
+pub fn (mut set TagSet) push(tag u64) {
+	set << tag
+}
+
+pub fn (mut set TagSet) pop() u64 {
+	return set.pop()
+}
+
+interface Message {
+	id() (u16, u16)
+	wait() bool
+	read(io.Reader) ?
+	write(io.Writer) ?
+}
+
+interface MessageWithContent {
+	Message
+	get_content() (Properties, []byte)
+	set_content(Properties, []byte)
+}
+/*
+The base interface implemented as:
+
+2.3.5  frame Details
+
+All frames consist of a header (7 octets), a payload of arbitrary size, and a 'frame-end' octet that detects
+malformed frames:
+
+  0      1         3             7                  size+7 size+8
+  +------+---------+-------------+  +------------+  +-----------+
+  | type | channel |     size    |  |  payload   |  | frame-end |
+  +------+---------+-------------+  +------------+  +-----------+
+   octet   short         long         size octets       octet
+
+To read a frame, we:
+
+ 1. Read the header and check the frame type and channel.
+ 2. Depending on the frame type, we read the payload and process it.
+ 3. Read the frame end octet.
+
+In realistic implementations where performance is a concern, we would use
+“read-ahead buffering” or “gathering reads” to avoid doing three separate
+system calls to read a frame.
+
+*/
+
+interface Frame {
+	write(io.Writer) ?
+	channel() u16
+}
+
+struct VReader {
+	r io.Reader
+}
+
+struct VWriter {
+	w io.Writer
+}
+
+struct ProtocolHeader {}
+
+pub fn (h ProtocolHeader) write(mut w io.Writer) ? {
+	mut to_write := []u8{cap: 8}
+	to_write << 'AMQP'.bytes()
+	to_write << 0
+	to_write << 0
+	to_write << 9
+	to_write << 1
+	w.write(to_write) or {
+		return err
+	}
+}
+
+pub fn (h ProtocolHeader) channel() u16 {
+	panic("only valid as initial handshake")
+}
+
