@@ -1,4 +1,4 @@
-module main
+module vamqp
 import time
 import io
 
@@ -215,10 +215,6 @@ type TagSet = []u64
 // 	return val
 // }
 
-pub fn (set TagSet) len() int {
-	return set.len()
-}
-
 pub fn (set TagSet) less(i int, j int) bool {
 	return (set)[i] < (set)[j]
 }
@@ -233,10 +229,6 @@ pub fn (mut set TagSet) swap(i int, j int) {
 
 pub fn (mut set TagSet) push(tag u64) {
 	set << tag
-}
-
-pub fn (mut set TagSet) pop() u64 {
-	return set.pop()
 }
 
 interface Message {
