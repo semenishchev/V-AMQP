@@ -1,3 +1,5 @@
+module vamqp
+
 pub fn set_bit(z i64, x i64, i int, b u8) i64 {
 	if b == 0 {
 		return z &~ (1 << i)

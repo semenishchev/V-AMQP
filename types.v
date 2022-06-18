@@ -1,11 +1,13 @@
 module vamqp
+
 import time
 import io
+import sync
 
 // Constants for standard AMQP 0-9-1 exchange types.
 
-// 	bool, byte, i16, int, i64, f32, f64, string, []byte, Decimal, time.Time, None
-type Any = bool | byte | i16 | int | i64 | f32 | f64 | string | []byte | Decmical | time.Time | Table | None | []Any
+// 	bool, u8, i16, int, i64, f32, f64, string, []byte, Decimal, time.Time, None
+type Any = bool | u8 | byte | i16 | int | i64 | f32 | f64 | string | []byte | []u8 | Decmical | time.Time | Table | None | []Any
 const (
 	exchange_direct  = "direct"
 	exchange_fanout  = "fanout"
@@ -138,8 +140,11 @@ struct Queue {
 	consumers int    // number of consumers receiving deliveries
 }
 
-struct DererredConfirmation {
+struct DeferredConfirmation {
+	mut:
 	wg sync.WaitGroup
+	delivery_tag u64
+	confirmation Confirmation
 }
 
 // Publishing captures the client message sent to the server.  The fields
@@ -161,12 +166,13 @@ struct Publishing {
 	type_            string    // message type name
 	user_id          string    // creating user id - ex: "guest"
 	app_id           string    // creating application id
-	
-	body             []byte    // the application specific payload of the message
+	mut:
+	body             []u8    // the application specific payload of the message
 }
 
 struct Confirmation {
 	delivery_tag u64
+	mut:
 	ack 	     bool
 }
 
@@ -234,14 +240,16 @@ pub fn (mut set TagSet) push(tag u64) {
 interface Message {
 	id() (u16, u16)
 	wait() bool
+	mut:
 	read(io.Reader) ?
 	write(io.Writer) ?
 }
 
+[heap]
 interface MessageWithContent {
 	Message
-	get_content() (Properties, []byte)
-	set_content(Properties, []byte)
+	get_content() (Properties, []u8)
+	set_content(Properties, []u8)
 }
 /*
 The base interface implemented as:
@@ -275,10 +283,12 @@ interface Frame {
 }
 
 struct VReader {
+	mut:
 	r io.Reader
 }
 
 struct VWriter {
+	mut:
 	w io.Writer
 }
 
@@ -300,3 +310,44 @@ pub fn (h ProtocolHeader) channel() u16 {
 	panic("only valid as initial handshake")
 }
 
+struct MethodFrame {
+	channel_id u16
+	class_id u16
+	method_id u16
+	message Message
+}
+
+pub fn (f MethodFrame) channel() u16 {
+	return f.channel_id
+}
+
+struct HeartbeatFrame {
+	channel_id u16
+}
+
+pub fn (f HeartbeatFrame) channel() u16 {
+	return f.channel_id
+}
+
+[heap]
+struct HeaderFrame {
+	channel_id u16
+	class_id u16
+	weight u16
+	size u64
+	properties Properties
+}
+
+pub fn (f HeaderFrame) channel() u16 {
+	return f.channel_id
+}
+
+[heap]
+struct BodyFrame {
+	channel_id u16
+	body []u8
+}
+
+pub fn (f BodyFrame) channel() u16 {
+	return f.channel_id
+}
