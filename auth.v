@@ -1,4 +1,4 @@
-module main
+module vamqp
 
 interface Authentication {
 	mechanism() string

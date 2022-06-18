@@ -1,4 +1,4 @@
-module main
+module vamqp
 
 const (
 	frame_method		= 1
