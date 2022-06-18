@@ -75,7 +75,7 @@ pub fn (e AmqpError) error() string {
 
 // Used by header frames to capture routing and header information
 struct Properties {
-	contenttype_     string    // MIME content type
+	content_type     string    // MIME content type
 	content_encoding string    // MIME content encoding
 	headers          Table     // Application or header exchange table
 	delivery_mode    u8        // queue implementation use - Transient (1) or Persistent (2)
@@ -136,6 +136,10 @@ struct Queue {
 	name      string // server confirmed or generated name
 	messages  int    // count of messages not awaiting acknowledgment
 	consumers int    // number of consumers receiving deliveries
+}
+
+struct DererredConfirmation {
+	wg sync.WaitGroup
 }
 
 // Publishing captures the client message sent to the server.  The fields
