@@ -76,15 +76,15 @@ struct ConnectionStart {
 	
 }
 
-fn (msg *ConnectionStart) id() (u16, u16) {
+fn (msg ConnectionStart) id() (u16, u16) {
 	return 10, 10
 }
 
-fn (msg *ConnectionStart) wait() (bool) {
+fn (msg ConnectionStart) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionStart) write(w io.Writer) {
+fn (msg ConnectionStart) write(w io.Writer) {
 	
 	
      if err = binary.Write(w, binary.BigEndian, msg.versionMajor); err != nil { return }
@@ -101,9 +101,9 @@ fn (msg *ConnectionStart) write(w io.Writer) {
 	return
 }
 
-fn (msg *ConnectionStart) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionStart) read(r io.Reader) ? {
+	
+	
      if err = binary.Read(r, binary.BigEndian, &msg.versionMajor); err != nil { return }
      if err = binary.Read(r, binary.BigEndian, &msg.versionMinor); err != nil { return }
     
@@ -128,15 +128,15 @@ struct ConnectionStartOk {
 	
 }
 
-fn (msg *ConnectionStartOk) id() (u16, u16) {
+fn (msg ConnectionStartOk) id() (u16, u16) {
 	return 10, 11
 }
 
-fn (msg *ConnectionStartOk) wait() (bool) {
+fn (msg ConnectionStartOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionStartOk) write(w io.Writer) {
+fn (msg ConnectionStartOk) write(w io.Writer) {
 	
 	
      if err = writeTable(w, msg.clientProperties); err != nil { return }
@@ -154,9 +154,9 @@ fn (msg *ConnectionStartOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *ConnectionStartOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionStartOk) read(r io.Reader) ? {
+	
+	
      if msg.clientProperties, err = readTable(r); err != nil { return }
     
   
@@ -179,15 +179,15 @@ struct ConnectionSecure {
 	
 }
 
-fn (msg *ConnectionSecure) id() (u16, u16) {
+fn (msg ConnectionSecure) id() (u16, u16) {
 	return 10, 20
 }
 
-fn (msg *ConnectionSecure) wait() (bool) {
+fn (msg ConnectionSecure) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionSecure) write(w io.Writer) {
+fn (msg ConnectionSecure) write(w io.Writer) {
 	
 	
      if err = writeLongstr(w, msg.challenge); err != nil { return }
@@ -196,9 +196,9 @@ fn (msg *ConnectionSecure) write(w io.Writer) {
 	return
 }
 
-fn (msg *ConnectionSecure) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionSecure) read(r io.Reader) ? {
+	
+	
      if msg.challenge, err = readLongstr(r); err != nil { return }
     
   
@@ -212,15 +212,15 @@ struct ConnectionSecureOk {
 	
 }
 
-fn (msg *ConnectionSecureOk) id() (u16, u16) {
+fn (msg ConnectionSecureOk) id() (u16, u16) {
 	return 10, 21
 }
 
-fn (msg *ConnectionSecureOk) wait() (bool) {
+fn (msg ConnectionSecureOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionSecureOk) write(w io.Writer) {
+fn (msg ConnectionSecureOk) write(w io.Writer) {
 	
 	
      if err = writeLongstr(w, msg.response); err != nil { return }
@@ -229,9 +229,9 @@ fn (msg *ConnectionSecureOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *ConnectionSecureOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionSecureOk) read(r io.Reader) ? {
+	
+	
      if msg.response, err = readLongstr(r); err != nil { return }
     
   
@@ -247,15 +247,15 @@ struct ConnectionTune {
 	
 }
 
-fn (msg *ConnectionTune) id() (u16, u16) {
+fn (msg ConnectionTune) id() (u16, u16) {
 	return 10, 30
 }
 
-fn (msg *ConnectionTune) wait() (bool) {
+fn (msg ConnectionTune) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionTune) write(w io.Writer) {
+fn (msg ConnectionTune) write(w io.Writer) {
 	
 	
      if err = binary.Write(w, binary.BigEndian, msg.channelMax); err != nil { return }
@@ -270,9 +270,9 @@ fn (msg *ConnectionTune) write(w io.Writer) {
 	return
 }
 
-fn (msg *ConnectionTune) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionTune) read(r io.Reader) ? {
+	
+	
      if err = binary.Read(r, binary.BigEndian, &msg.channelMax); err != nil { return }
     
   
@@ -294,15 +294,15 @@ struct ConnectionTuneOk {
 	
 }
 
-fn (msg *ConnectionTuneOk) id() (u16, u16) {
+fn (msg ConnectionTuneOk) id() (u16, u16) {
 	return 10, 31
 }
 
-fn (msg *ConnectionTuneOk) wait() (bool) {
+fn (msg ConnectionTuneOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionTuneOk) write(w io.Writer) {
+fn (msg ConnectionTuneOk) write(w io.Writer) {
 	
 	
      if err = binary.Write(w, binary.BigEndian, msg.channelMax); err != nil { return }
@@ -317,9 +317,9 @@ fn (msg *ConnectionTuneOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *ConnectionTuneOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionTuneOk) read(r io.Reader) ? {
+	
+	
      if err = binary.Read(r, binary.BigEndian, &msg.channelMax); err != nil { return }
     
   
@@ -341,16 +341,16 @@ struct ConnectionOpen {
 	
 }
 
-fn (msg *ConnectionOpen) id() (u16, u16) {
+fn (msg ConnectionOpen) id() (u16, u16) {
 	return 10, 40
 }
 
-fn (msg *ConnectionOpen) wait() (bool) {
+fn (msg ConnectionOpen) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionOpen) write(w io.Writer) {
-	mut bits u8
+fn (msg ConnectionOpen) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = writeShortstr(w, msg.virtualHost); err != nil { return }
      if err = writeShortstr(w, msg.reserved1); err != nil { return }
@@ -359,22 +359,22 @@ fn (msg *ConnectionOpen) write(w io.Writer) {
     
     if msg.reserved2 { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *ConnectionOpen) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *ConnectionOpen) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if msg.virtualHost, err = readShortstr(r); err != nil { return }
      if msg.reserved1, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.reserved2 = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.reserved2 = (bits & (1 << 0) > 0)
     
   
     return
@@ -387,15 +387,15 @@ struct ConnectionOpenOk {
 	
 }
 
-fn (msg *ConnectionOpenOk) id() (u16, u16) {
+fn (msg ConnectionOpenOk) id() (u16, u16) {
 	return 10, 41
 }
 
-fn (msg *ConnectionOpenOk) wait() (bool) {
+fn (msg ConnectionOpenOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionOpenOk) write(w io.Writer) {
+fn (msg ConnectionOpenOk) write(w io.Writer) {
 	
 	
      if err = writeShortstr(w, msg.reserved1); err != nil { return }
@@ -404,9 +404,9 @@ fn (msg *ConnectionOpenOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *ConnectionOpenOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionOpenOk) read(r io.Reader) ? {
+	
+	
      if msg.reserved1, err = readShortstr(r); err != nil { return }
     
   
@@ -423,15 +423,15 @@ struct ConnectionClose {
 	
 }
 
-fn (msg *ConnectionClose) id() (u16, u16) {
+fn (msg ConnectionClose) id() (u16, u16) {
 	return 10, 50
 }
 
-fn (msg *ConnectionClose) wait() (bool) {
+fn (msg ConnectionClose) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionClose) write(w io.Writer) {
+fn (msg ConnectionClose) write(w io.Writer) {
 	
 	
      if err = binary.Write(w, binary.BigEndian, msg.replyCode); err != nil { return }
@@ -447,9 +447,9 @@ fn (msg *ConnectionClose) write(w io.Writer) {
 	return
 }
 
-fn (msg *ConnectionClose) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionClose) read(r io.Reader) ? {
+	
+	
      if err = binary.Read(r, binary.BigEndian, &msg.replyCode); err != nil { return }
     
   
@@ -469,23 +469,23 @@ struct ConnectionCloseOk {
 	
 }
 
-fn (msg *ConnectionCloseOk) id() (u16, u16) {
+fn (msg ConnectionCloseOk) id() (u16, u16) {
 	return 10, 51
 }
 
-fn (msg *ConnectionCloseOk) wait() (bool) {
+fn (msg ConnectionCloseOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ConnectionCloseOk) write(w io.Writer) {
+fn (msg ConnectionCloseOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *ConnectionCloseOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionCloseOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -496,15 +496,15 @@ struct ConnectionBlocked {
 	
 }
 
-fn (msg *ConnectionBlocked) id() (u16, u16) {
+fn (msg ConnectionBlocked) id() (u16, u16) {
 	return 10, 60
 }
 
-fn (msg *ConnectionBlocked) wait() (bool) {
+fn (msg ConnectionBlocked) wait() (bool) {
 	return false
 }
 
-fn (msg *ConnectionBlocked) write(w io.Writer) {
+fn (msg ConnectionBlocked) write(w io.Writer) {
 	
 	
      if err = writeShortstr(w, msg.reason); err != nil { return }
@@ -513,9 +513,9 @@ fn (msg *ConnectionBlocked) write(w io.Writer) {
 	return
 }
 
-fn (msg *ConnectionBlocked) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionBlocked) read(r io.Reader) ? {
+	
+	
      if msg.reason, err = readShortstr(r); err != nil { return }
     
   
@@ -528,23 +528,23 @@ struct ConnectionUnblocked {
 	
 }
 
-fn (msg *ConnectionUnblocked) id() (u16, u16) {
+fn (msg ConnectionUnblocked) id() (u16, u16) {
 	return 10, 61
 }
 
-fn (msg *ConnectionUnblocked) wait() (bool) {
+fn (msg ConnectionUnblocked) wait() (bool) {
 	return false
 }
 
-fn (msg *ConnectionUnblocked) write(w io.Writer) {
+fn (msg ConnectionUnblocked) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *ConnectionUnblocked) read(r io.Reader) (err error) {
-
-
+fn (msg *ConnectionUnblocked) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -555,15 +555,15 @@ struct ChannelOpen {
 	
 }
 
-fn (msg *ChannelOpen) id() (u16, u16) {
+fn (msg ChannelOpen) id() (u16, u16) {
 	return 20, 10
 }
 
-fn (msg *ChannelOpen) wait() (bool) {
+fn (msg ChannelOpen) wait() (bool) {
 	return true
 }
 
-fn (msg *ChannelOpen) write(w io.Writer) {
+fn (msg ChannelOpen) write(w io.Writer) {
 	
 	
      if err = writeShortstr(w, msg.reserved1); err != nil { return }
@@ -572,9 +572,9 @@ fn (msg *ChannelOpen) write(w io.Writer) {
 	return
 }
 
-fn (msg *ChannelOpen) read(r io.Reader) (err error) {
-
-
+fn (msg *ChannelOpen) read(r io.Reader) ? {
+	
+	
      if msg.reserved1, err = readShortstr(r); err != nil { return }
     
   
@@ -588,15 +588,15 @@ struct ChannelOpenOk {
 	
 }
 
-fn (msg *ChannelOpenOk) id() (u16, u16) {
+fn (msg ChannelOpenOk) id() (u16, u16) {
 	return 20, 11
 }
 
-fn (msg *ChannelOpenOk) wait() (bool) {
+fn (msg ChannelOpenOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ChannelOpenOk) write(w io.Writer) {
+fn (msg ChannelOpenOk) write(w io.Writer) {
 	
 	
      if err = writeLongstr(w, msg.reserved1); err != nil { return }
@@ -605,9 +605,9 @@ fn (msg *ChannelOpenOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *ChannelOpenOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ChannelOpenOk) read(r io.Reader) ? {
+	
+	
      if msg.reserved1, err = readLongstr(r); err != nil { return }
     
   
@@ -621,32 +621,32 @@ struct ChannelFlow {
 	
 }
 
-fn (msg *ChannelFlow) id() (u16, u16) {
+fn (msg ChannelFlow) id() (u16, u16) {
 	return 20, 20
 }
 
-fn (msg *ChannelFlow) wait() (bool) {
+fn (msg ChannelFlow) wait() (bool) {
 	return true
 }
 
-fn (msg *ChannelFlow) write(w io.Writer) {
-	mut bits u8
+fn (msg ChannelFlow) write(w io.Writer) {
+	mut bits := u16(0)
 	
     
     if msg.active { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *ChannelFlow) read(r io.Reader) (err error) {
-var bits u8
-
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.active = (bits & (1 << 0) > 0)
+fn (msg *ChannelFlow) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.active = (bits & (1 << 0) > 0)
     
   
     return
@@ -659,32 +659,32 @@ struct ChannelFlowOk {
 	
 }
 
-fn (msg *ChannelFlowOk) id() (u16, u16) {
+fn (msg ChannelFlowOk) id() (u16, u16) {
 	return 20, 21
 }
 
-fn (msg *ChannelFlowOk) wait() (bool) {
+fn (msg ChannelFlowOk) wait() (bool) {
 	return false
 }
 
-fn (msg *ChannelFlowOk) write(w io.Writer) {
-	mut bits u8
+fn (msg ChannelFlowOk) write(w io.Writer) {
+	mut bits := u16(0)
 	
     
     if msg.active { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *ChannelFlowOk) read(r io.Reader) (err error) {
-var bits u8
-
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.active = (bits & (1 << 0) > 0)
+fn (msg *ChannelFlowOk) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.active = (bits & (1 << 0) > 0)
     
   
     return
@@ -700,15 +700,15 @@ struct ChannelClose {
 	
 }
 
-fn (msg *ChannelClose) id() (u16, u16) {
+fn (msg ChannelClose) id() (u16, u16) {
 	return 20, 40
 }
 
-fn (msg *ChannelClose) wait() (bool) {
+fn (msg ChannelClose) wait() (bool) {
 	return true
 }
 
-fn (msg *ChannelClose) write(w io.Writer) {
+fn (msg ChannelClose) write(w io.Writer) {
 	
 	
      if err = binary.Write(w, binary.BigEndian, msg.replyCode); err != nil { return }
@@ -724,9 +724,9 @@ fn (msg *ChannelClose) write(w io.Writer) {
 	return
 }
 
-fn (msg *ChannelClose) read(r io.Reader) (err error) {
-
-
+fn (msg *ChannelClose) read(r io.Reader) ? {
+	
+	
      if err = binary.Read(r, binary.BigEndian, &msg.replyCode); err != nil { return }
     
   
@@ -746,23 +746,23 @@ struct ChannelCloseOk {
 	
 }
 
-fn (msg *ChannelCloseOk) id() (u16, u16) {
+fn (msg ChannelCloseOk) id() (u16, u16) {
 	return 20, 41
 }
 
-fn (msg *ChannelCloseOk) wait() (bool) {
+fn (msg ChannelCloseOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ChannelCloseOk) write(w io.Writer) {
+fn (msg ChannelCloseOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *ChannelCloseOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ChannelCloseOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -781,16 +781,16 @@ struct ExchangeDeclare {
 	
 }
 
-fn (msg *ExchangeDeclare) id() (u16, u16) {
+fn (msg ExchangeDeclare) id() (u16, u16) {
 	return 40, 10
 }
 
-fn (msg *ExchangeDeclare) wait() (bool) {
+fn (msg ExchangeDeclare) wait() (bool) {
 	return true
 }
 
-fn (msg *ExchangeDeclare) write(w io.Writer) {
-	mut bits u8
+fn (msg ExchangeDeclare) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -810,7 +810,7 @@ fn (msg *ExchangeDeclare) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 4 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
      if err = writeTable(w, msg.arguments); err != nil { return }
     
@@ -818,9 +818,9 @@ fn (msg *ExchangeDeclare) write(w io.Writer) {
 	return
 }
 
-fn (msg *ExchangeDeclare) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *ExchangeDeclare) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
@@ -828,14 +828,14 @@ var bits u8
      if msg.type, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.passive = (bits & (1 << 0) > 0)
-     msg.durable = (bits & (1 << 1) > 0)
-     msg.autoDelete = (bits & (1 << 2) > 0)
-     msg.internal = (bits & (1 << 3) > 0)
-     msg.noWait = (bits & (1 << 4) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.passive = (bits & (1 << 0) > 0)
+    msg.durable = (bits & (1 << 1) > 0)
+    msg.autoDelete = (bits & (1 << 2) > 0)
+    msg.internal = (bits & (1 << 3) > 0)
+    msg.noWait = (bits & (1 << 4) > 0)
     
   
      if msg.arguments, err = readTable(r); err != nil { return }
@@ -850,23 +850,23 @@ struct ExchangeDeclareOk {
 	
 }
 
-fn (msg *ExchangeDeclareOk) id() (u16, u16) {
+fn (msg ExchangeDeclareOk) id() (u16, u16) {
 	return 40, 11
 }
 
-fn (msg *ExchangeDeclareOk) wait() (bool) {
+fn (msg ExchangeDeclareOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ExchangeDeclareOk) write(w io.Writer) {
+fn (msg ExchangeDeclareOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *ExchangeDeclareOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ExchangeDeclareOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -880,16 +880,16 @@ struct ExchangeDelete {
 	
 }
 
-fn (msg *ExchangeDelete) id() (u16, u16) {
+fn (msg ExchangeDelete) id() (u16, u16) {
 	return 40, 20
 }
 
-fn (msg *ExchangeDelete) wait() (bool) {
+fn (msg ExchangeDelete) wait() (bool) {
 	return true
 }
 
-fn (msg *ExchangeDelete) write(w io.Writer) {
-	mut bits u8
+fn (msg ExchangeDelete) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -902,25 +902,25 @@ fn (msg *ExchangeDelete) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 1 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *ExchangeDelete) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *ExchangeDelete) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
      if msg.exchange, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.ifUnused = (bits & (1 << 0) > 0)
-     msg.noWait = (bits & (1 << 1) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.ifUnused = (bits & (1 << 0) > 0)
+    msg.noWait = (bits & (1 << 1) > 0)
     
   
     return
@@ -932,23 +932,23 @@ struct ExchangeDeleteOk {
 	
 }
 
-fn (msg *ExchangeDeleteOk) id() (u16, u16) {
+fn (msg ExchangeDeleteOk) id() (u16, u16) {
 	return 40, 21
 }
 
-fn (msg *ExchangeDeleteOk) wait() (bool) {
+fn (msg ExchangeDeleteOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ExchangeDeleteOk) write(w io.Writer) {
+fn (msg ExchangeDeleteOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *ExchangeDeleteOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ExchangeDeleteOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -964,16 +964,16 @@ struct ExchangeBind {
 	
 }
 
-fn (msg *ExchangeBind) id() (u16, u16) {
+fn (msg ExchangeBind) id() (u16, u16) {
 	return 40, 30
 }
 
-fn (msg *ExchangeBind) wait() (bool) {
+fn (msg ExchangeBind) wait() (bool) {
 	return true
 }
 
-fn (msg *ExchangeBind) write(w io.Writer) {
-	mut bits u8
+fn (msg ExchangeBind) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -986,7 +986,7 @@ fn (msg *ExchangeBind) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
      if err = writeTable(w, msg.arguments); err != nil { return }
     
@@ -994,9 +994,9 @@ fn (msg *ExchangeBind) write(w io.Writer) {
 	return
 }
 
-fn (msg *ExchangeBind) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *ExchangeBind) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
@@ -1005,10 +1005,10 @@ var bits u8
      if msg.routingKey, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.noWait = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.noWait = (bits & (1 << 0) > 0)
     
   
      if msg.arguments, err = readTable(r); err != nil { return }
@@ -1023,23 +1023,23 @@ struct ExchangeBindOk {
 	
 }
 
-fn (msg *ExchangeBindOk) id() (u16, u16) {
+fn (msg ExchangeBindOk) id() (u16, u16) {
 	return 40, 31
 }
 
-fn (msg *ExchangeBindOk) wait() (bool) {
+fn (msg ExchangeBindOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ExchangeBindOk) write(w io.Writer) {
+fn (msg ExchangeBindOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *ExchangeBindOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ExchangeBindOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -1055,16 +1055,16 @@ struct ExchangeUnbind {
 	
 }
 
-fn (msg *ExchangeUnbind) id() (u16, u16) {
+fn (msg ExchangeUnbind) id() (u16, u16) {
 	return 40, 40
 }
 
-fn (msg *ExchangeUnbind) wait() (bool) {
+fn (msg ExchangeUnbind) wait() (bool) {
 	return true
 }
 
-fn (msg *ExchangeUnbind) write(w io.Writer) {
-	mut bits u8
+fn (msg ExchangeUnbind) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -1077,7 +1077,7 @@ fn (msg *ExchangeUnbind) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
      if err = writeTable(w, msg.arguments); err != nil { return }
     
@@ -1085,9 +1085,9 @@ fn (msg *ExchangeUnbind) write(w io.Writer) {
 	return
 }
 
-fn (msg *ExchangeUnbind) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *ExchangeUnbind) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
@@ -1096,10 +1096,10 @@ var bits u8
      if msg.routingKey, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.noWait = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.noWait = (bits & (1 << 0) > 0)
     
   
      if msg.arguments, err = readTable(r); err != nil { return }
@@ -1114,23 +1114,23 @@ struct ExchangeUnbindOk {
 	
 }
 
-fn (msg *ExchangeUnbindOk) id() (u16, u16) {
+fn (msg ExchangeUnbindOk) id() (u16, u16) {
 	return 40, 51
 }
 
-fn (msg *ExchangeUnbindOk) wait() (bool) {
+fn (msg ExchangeUnbindOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ExchangeUnbindOk) write(w io.Writer) {
+fn (msg ExchangeUnbindOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *ExchangeUnbindOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ExchangeUnbindOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -1148,16 +1148,16 @@ struct QueueDeclare {
 	
 }
 
-fn (msg *QueueDeclare) id() (u16, u16) {
+fn (msg QueueDeclare) id() (u16, u16) {
 	return 50, 10
 }
 
-fn (msg *QueueDeclare) wait() (bool) {
+fn (msg QueueDeclare) wait() (bool) {
 	return true
 }
 
-fn (msg *QueueDeclare) write(w io.Writer) {
-	mut bits u8
+fn (msg QueueDeclare) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -1176,7 +1176,7 @@ fn (msg *QueueDeclare) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 4 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
      if err = writeTable(w, msg.arguments); err != nil { return }
     
@@ -1184,23 +1184,23 @@ fn (msg *QueueDeclare) write(w io.Writer) {
 	return
 }
 
-fn (msg *QueueDeclare) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *QueueDeclare) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
      if msg.queue, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.passive = (bits & (1 << 0) > 0)
-     msg.durable = (bits & (1 << 1) > 0)
-     msg.exclusive = (bits & (1 << 2) > 0)
-     msg.autoDelete = (bits & (1 << 3) > 0)
-     msg.noWait = (bits & (1 << 4) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.passive = (bits & (1 << 0) > 0)
+    msg.durable = (bits & (1 << 1) > 0)
+    msg.exclusive = (bits & (1 << 2) > 0)
+    msg.autoDelete = (bits & (1 << 3) > 0)
+    msg.noWait = (bits & (1 << 4) > 0)
     
   
      if msg.arguments, err = readTable(r); err != nil { return }
@@ -1218,15 +1218,15 @@ struct QueueDeclareOk {
 	
 }
 
-fn (msg *QueueDeclareOk) id() (u16, u16) {
+fn (msg QueueDeclareOk) id() (u16, u16) {
 	return 50, 11
 }
 
-fn (msg *QueueDeclareOk) wait() (bool) {
+fn (msg QueueDeclareOk) wait() (bool) {
 	return true
 }
 
-fn (msg *QueueDeclareOk) write(w io.Writer) {
+fn (msg QueueDeclareOk) write(w io.Writer) {
 	
 	
      if err = writeShortstr(w, msg.queue); err != nil { return }
@@ -1239,9 +1239,9 @@ fn (msg *QueueDeclareOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *QueueDeclareOk) read(r io.Reader) (err error) {
-
-
+fn (msg *QueueDeclareOk) read(r io.Reader) ? {
+	
+	
      if msg.queue, err = readShortstr(r); err != nil { return }
     
   
@@ -1264,16 +1264,16 @@ struct QueueBind {
 	
 }
 
-fn (msg *QueueBind) id() (u16, u16) {
+fn (msg QueueBind) id() (u16, u16) {
 	return 50, 20
 }
 
-fn (msg *QueueBind) wait() (bool) {
+fn (msg QueueBind) wait() (bool) {
 	return true
 }
 
-fn (msg *QueueBind) write(w io.Writer) {
-	mut bits u8
+fn (msg QueueBind) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -1286,7 +1286,7 @@ fn (msg *QueueBind) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
      if err = writeTable(w, msg.arguments); err != nil { return }
     
@@ -1294,9 +1294,9 @@ fn (msg *QueueBind) write(w io.Writer) {
 	return
 }
 
-fn (msg *QueueBind) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *QueueBind) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
@@ -1305,10 +1305,10 @@ var bits u8
      if msg.routingKey, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.noWait = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.noWait = (bits & (1 << 0) > 0)
     
   
      if msg.arguments, err = readTable(r); err != nil { return }
@@ -1323,23 +1323,23 @@ struct QueueBindOk {
 	
 }
 
-fn (msg *QueueBindOk) id() (u16, u16) {
+fn (msg QueueBindOk) id() (u16, u16) {
 	return 50, 21
 }
 
-fn (msg *QueueBindOk) wait() (bool) {
+fn (msg QueueBindOk) wait() (bool) {
 	return true
 }
 
-fn (msg *QueueBindOk) write(w io.Writer) {
+fn (msg QueueBindOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *QueueBindOk) read(r io.Reader) (err error) {
-
-
+fn (msg *QueueBindOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -1354,15 +1354,15 @@ struct QueueUnbind {
 	
 }
 
-fn (msg *QueueUnbind) id() (u16, u16) {
+fn (msg QueueUnbind) id() (u16, u16) {
 	return 50, 50
 }
 
-fn (msg *QueueUnbind) wait() (bool) {
+fn (msg QueueUnbind) wait() (bool) {
 	return true
 }
 
-fn (msg *QueueUnbind) write(w io.Writer) {
+fn (msg QueueUnbind) write(w io.Writer) {
 	
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
@@ -1379,9 +1379,9 @@ fn (msg *QueueUnbind) write(w io.Writer) {
 	return
 }
 
-fn (msg *QueueUnbind) read(r io.Reader) (err error) {
-
-
+fn (msg *QueueUnbind) read(r io.Reader) ? {
+	
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
@@ -1402,23 +1402,23 @@ struct QueueUnbindOk {
 	
 }
 
-fn (msg *QueueUnbindOk) id() (u16, u16) {
+fn (msg QueueUnbindOk) id() (u16, u16) {
 	return 50, 51
 }
 
-fn (msg *QueueUnbindOk) wait() (bool) {
+fn (msg QueueUnbindOk) wait() (bool) {
 	return true
 }
 
-fn (msg *QueueUnbindOk) write(w io.Writer) {
+fn (msg QueueUnbindOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *QueueUnbindOk) read(r io.Reader) (err error) {
-
-
+fn (msg *QueueUnbindOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -1431,16 +1431,16 @@ struct QueuePurge {
 	
 }
 
-fn (msg *QueuePurge) id() (u16, u16) {
+fn (msg QueuePurge) id() (u16, u16) {
 	return 50, 30
 }
 
-fn (msg *QueuePurge) wait() (bool) {
+fn (msg QueuePurge) wait() (bool) {
 	return true
 }
 
-fn (msg *QueuePurge) write(w io.Writer) {
-	mut bits u8
+fn (msg QueuePurge) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -1451,24 +1451,24 @@ fn (msg *QueuePurge) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *QueuePurge) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *QueuePurge) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
      if msg.queue, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.noWait = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.noWait = (bits & (1 << 0) > 0)
     
   
     return
@@ -1481,15 +1481,15 @@ struct QueuePurgeOk {
 	
 }
 
-fn (msg *QueuePurgeOk) id() (u16, u16) {
+fn (msg QueuePurgeOk) id() (u16, u16) {
 	return 50, 31
 }
 
-fn (msg *QueuePurgeOk) wait() (bool) {
+fn (msg QueuePurgeOk) wait() (bool) {
 	return true
 }
 
-fn (msg *QueuePurgeOk) write(w io.Writer) {
+fn (msg QueuePurgeOk) write(w io.Writer) {
 	
 	
      if err = binary.Write(w, binary.BigEndian, msg.messageCount); err != nil { return }
@@ -1498,9 +1498,9 @@ fn (msg *QueuePurgeOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *QueuePurgeOk) read(r io.Reader) (err error) {
-
-
+fn (msg *QueuePurgeOk) read(r io.Reader) ? {
+	
+	
      if err = binary.Read(r, binary.BigEndian, &msg.messageCount); err != nil { return }
     
   
@@ -1518,16 +1518,16 @@ struct QueueDelete {
 	
 }
 
-fn (msg *QueueDelete) id() (u16, u16) {
+fn (msg QueueDelete) id() (u16, u16) {
 	return 50, 40
 }
 
-fn (msg *QueueDelete) wait() (bool) {
+fn (msg QueueDelete) wait() (bool) {
 	return true
 }
 
-fn (msg *QueueDelete) write(w io.Writer) {
-	mut bits u8
+fn (msg QueueDelete) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -1542,26 +1542,26 @@ fn (msg *QueueDelete) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 2 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *QueueDelete) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *QueueDelete) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
      if msg.queue, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.ifUnused = (bits & (1 << 0) > 0)
-     msg.ifEmpty = (bits & (1 << 1) > 0)
-     msg.noWait = (bits & (1 << 2) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.ifUnused = (bits & (1 << 0) > 0)
+    msg.ifEmpty = (bits & (1 << 1) > 0)
+    msg.noWait = (bits & (1 << 2) > 0)
     
   
     return
@@ -1574,15 +1574,15 @@ struct QueueDeleteOk {
 	
 }
 
-fn (msg *QueueDeleteOk) id() (u16, u16) {
+fn (msg QueueDeleteOk) id() (u16, u16) {
 	return 50, 41
 }
 
-fn (msg *QueueDeleteOk) wait() (bool) {
+fn (msg QueueDeleteOk) wait() (bool) {
 	return true
 }
 
-fn (msg *QueueDeleteOk) write(w io.Writer) {
+fn (msg QueueDeleteOk) write(w io.Writer) {
 	
 	
      if err = binary.Write(w, binary.BigEndian, msg.messageCount); err != nil { return }
@@ -1591,9 +1591,9 @@ fn (msg *QueueDeleteOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *QueueDeleteOk) read(r io.Reader) (err error) {
-
-
+fn (msg *QueueDeleteOk) read(r io.Reader) ? {
+	
+	
      if err = binary.Read(r, binary.BigEndian, &msg.messageCount); err != nil { return }
     
   
@@ -1609,16 +1609,16 @@ struct BasicQos {
 	
 }
 
-fn (msg *BasicQos) id() (u16, u16) {
+fn (msg BasicQos) id() (u16, u16) {
 	return 60, 10
 }
 
-fn (msg *BasicQos) wait() (bool) {
+fn (msg BasicQos) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicQos) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicQos) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.prefetchSize); err != nil { return }
     
@@ -1629,24 +1629,24 @@ fn (msg *BasicQos) write(w io.Writer) {
     
     if msg.global { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *BasicQos) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicQos) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.prefetchSize); err != nil { return }
     
   
      if err = binary.Read(r, binary.BigEndian, &msg.prefetchCount); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.global = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.global = (bits & (1 << 0) > 0)
     
   
     return
@@ -1658,23 +1658,23 @@ struct BasicQosOk {
 	
 }
 
-fn (msg *BasicQosOk) id() (u16, u16) {
+fn (msg BasicQosOk) id() (u16, u16) {
 	return 60, 11
 }
 
-fn (msg *BasicQosOk) wait() (bool) {
+fn (msg BasicQosOk) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicQosOk) write(w io.Writer) {
+fn (msg BasicQosOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *BasicQosOk) read(r io.Reader) (err error) {
-
-
+fn (msg *BasicQosOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -1692,16 +1692,16 @@ struct BasicConsume {
 	
 }
 
-fn (msg *BasicConsume) id() (u16, u16) {
+fn (msg BasicConsume) id() (u16, u16) {
 	return 60, 20
 }
 
-fn (msg *BasicConsume) wait() (bool) {
+fn (msg BasicConsume) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicConsume) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicConsume) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -1719,7 +1719,7 @@ fn (msg *BasicConsume) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 3 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
      if err = writeTable(w, msg.arguments); err != nil { return }
     
@@ -1727,9 +1727,9 @@ fn (msg *BasicConsume) write(w io.Writer) {
 	return
 }
 
-fn (msg *BasicConsume) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicConsume) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
@@ -1737,13 +1737,13 @@ var bits u8
      if msg.consumerTag, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.noLocal = (bits & (1 << 0) > 0)
-     msg.noAck = (bits & (1 << 1) > 0)
-     msg.exclusive = (bits & (1 << 2) > 0)
-     msg.noWait = (bits & (1 << 3) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.noLocal = (bits & (1 << 0) > 0)
+    msg.noAck = (bits & (1 << 1) > 0)
+    msg.exclusive = (bits & (1 << 2) > 0)
+    msg.noWait = (bits & (1 << 3) > 0)
     
   
      if msg.arguments, err = readTable(r); err != nil { return }
@@ -1759,15 +1759,15 @@ struct BasicConsumeOk {
 	
 }
 
-fn (msg *BasicConsumeOk) id() (u16, u16) {
+fn (msg BasicConsumeOk) id() (u16, u16) {
 	return 60, 21
 }
 
-fn (msg *BasicConsumeOk) wait() (bool) {
+fn (msg BasicConsumeOk) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicConsumeOk) write(w io.Writer) {
+fn (msg BasicConsumeOk) write(w io.Writer) {
 	
 	
      if err = writeShortstr(w, msg.consumerTag); err != nil { return }
@@ -1776,9 +1776,9 @@ fn (msg *BasicConsumeOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *BasicConsumeOk) read(r io.Reader) (err error) {
-
-
+fn (msg *BasicConsumeOk) read(r io.Reader) ? {
+	
+	
      if msg.consumerTag, err = readShortstr(r); err != nil { return }
     
   
@@ -1793,16 +1793,16 @@ struct BasicCancel {
 	
 }
 
-fn (msg *BasicCancel) id() (u16, u16) {
+fn (msg BasicCancel) id() (u16, u16) {
 	return 60, 30
 }
 
-fn (msg *BasicCancel) wait() (bool) {
+fn (msg BasicCancel) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicCancel) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicCancel) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = writeShortstr(w, msg.consumerTag); err != nil { return }
     
@@ -1810,21 +1810,21 @@ fn (msg *BasicCancel) write(w io.Writer) {
     
     if msg.noWait { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *BasicCancel) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicCancel) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if msg.consumerTag, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.noWait = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.noWait = (bits & (1 << 0) > 0)
     
   
     return
@@ -1837,15 +1837,15 @@ struct BasicCancelOk {
 	
 }
 
-fn (msg *BasicCancelOk) id() (u16, u16) {
+fn (msg BasicCancelOk) id() (u16, u16) {
 	return 60, 31
 }
 
-fn (msg *BasicCancelOk) wait() (bool) {
+fn (msg BasicCancelOk) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicCancelOk) write(w io.Writer) {
+fn (msg BasicCancelOk) write(w io.Writer) {
 	
 	
      if err = writeShortstr(w, msg.consumerTag); err != nil { return }
@@ -1854,9 +1854,9 @@ fn (msg *BasicCancelOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *BasicCancelOk) read(r io.Reader) (err error) {
-
-
+fn (msg *BasicCancelOk) read(r io.Reader) ? {
+	
+	
      if msg.consumerTag, err = readShortstr(r); err != nil { return }
     
   
@@ -1875,25 +1875,25 @@ struct BasicPublish {
 	body []u8
 }
 
-fn (msg *BasicPublish) id() (u16, u16) {
+fn (msg BasicPublish) id() (u16, u16) {
 	return 60, 40
 }
 
-fn (msg *BasicPublish) wait() (bool) {
+fn (msg BasicPublish) wait() (bool) {
 	return false
 }
 
-fn (msg &BasicPublish) getContent() (properties, []u8) {
+fn (msg &BasicPublish) getContent() (Properties, []u8) {
 	return msg.properties, msg.body
 }
 
-fn (mut msg BasicPublish) setContent(props properties, body []u8) {
+fn (mut msg BasicPublish) setContent(props Properties, body []u8) {
 	msg.properties = props 
 	msg.body = body
 }
 
-fn (msg *BasicPublish) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicPublish) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -1907,14 +1907,14 @@ fn (msg *BasicPublish) write(w io.Writer) {
     
     if msg.immediate { bits |= 1 << 1 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *BasicPublish) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicPublish) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
@@ -1922,11 +1922,11 @@ var bits u8
      if msg.routingKey, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.mandatory = (bits & (1 << 0) > 0)
-     msg.immediate = (bits & (1 << 1) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.mandatory = (bits & (1 << 0) > 0)
+    msg.immediate = (bits & (1 << 1) > 0)
     
   
     return
@@ -1943,24 +1943,24 @@ struct BasicReturn {
 	body []u8
 }
 
-fn (msg *BasicReturn) id() (u16, u16) {
+fn (msg BasicReturn) id() (u16, u16) {
 	return 60, 50
 }
 
-fn (msg *BasicReturn) wait() (bool) {
+fn (msg BasicReturn) wait() (bool) {
 	return false
 }
 
-fn (msg &BasicReturn) getContent() (properties, []u8) {
+fn (msg &BasicReturn) getContent() (Properties, []u8) {
 	return msg.properties, msg.body
 }
 
-fn (mut msg BasicReturn) setContent(props properties, body []u8) {
+fn (mut msg BasicReturn) setContent(props Properties, body []u8) {
 	msg.properties = props 
 	msg.body = body
 }
 
-fn (msg *BasicReturn) write(w io.Writer) {
+fn (msg BasicReturn) write(w io.Writer) {
 	
 	
      if err = binary.Write(w, binary.BigEndian, msg.replyCode); err != nil { return }
@@ -1974,9 +1974,9 @@ fn (msg *BasicReturn) write(w io.Writer) {
 	return
 }
 
-fn (msg *BasicReturn) read(r io.Reader) (err error) {
-
-
+fn (msg *BasicReturn) read(r io.Reader) ? {
+	
+	
      if err = binary.Read(r, binary.BigEndian, &msg.replyCode); err != nil { return }
     
   
@@ -2000,25 +2000,25 @@ struct BasicDeliver {
 	body []u8
 }
 
-fn (msg *BasicDeliver) id() (u16, u16) {
+fn (msg BasicDeliver) id() (u16, u16) {
 	return 60, 60
 }
 
-fn (msg *BasicDeliver) wait() (bool) {
+fn (msg BasicDeliver) wait() (bool) {
 	return false
 }
 
-fn (msg &BasicDeliver) getContent() (properties, []u8) {
+fn (msg &BasicDeliver) getContent() (Properties, []u8) {
 	return msg.properties, msg.body
 }
 
-fn (mut msg BasicDeliver) setContent(props properties, body []u8) {
+fn (mut msg BasicDeliver) setContent(props Properties, body []u8) {
 	msg.properties = props 
 	msg.body = body
 }
 
-fn (msg *BasicDeliver) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicDeliver) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = writeShortstr(w, msg.consumerTag); err != nil { return }
     
@@ -2029,7 +2029,7 @@ fn (msg *BasicDeliver) write(w io.Writer) {
     
     if msg.redelivered { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
      if err = writeShortstr(w, msg.exchange); err != nil { return }
      if err = writeShortstr(w, msg.routingKey); err != nil { return }
@@ -2038,19 +2038,19 @@ fn (msg *BasicDeliver) write(w io.Writer) {
 	return
 }
 
-fn (msg *BasicDeliver) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicDeliver) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if msg.consumerTag, err = readShortstr(r); err != nil { return }
     
   
      if err = binary.Read(r, binary.BigEndian, &msg.deliveryTag); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.redelivered = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.redelivered = (bits & (1 << 0) > 0)
     
   
      if msg.exchange, err = readShortstr(r); err != nil { return }
@@ -2069,16 +2069,16 @@ struct BasicGet {
 	
 }
 
-fn (msg *BasicGet) id() (u16, u16) {
+fn (msg BasicGet) id() (u16, u16) {
 	return 60, 70
 }
 
-fn (msg *BasicGet) wait() (bool) {
+fn (msg BasicGet) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicGet) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicGet) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.reserved1); err != nil { return }
     
@@ -2089,24 +2089,24 @@ fn (msg *BasicGet) write(w io.Writer) {
     
     if msg.noAck { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *BasicGet) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicGet) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.reserved1); err != nil { return }
     
   
      if msg.queue, err = readShortstr(r); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.noAck = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.noAck = (bits & (1 << 0) > 0)
     
   
     return
@@ -2124,25 +2124,25 @@ struct BasicGetOk {
 	body []u8
 }
 
-fn (msg *BasicGetOk) id() (u16, u16) {
+fn (msg BasicGetOk) id() (u16, u16) {
 	return 60, 71
 }
 
-fn (msg *BasicGetOk) wait() (bool) {
+fn (msg BasicGetOk) wait() (bool) {
 	return true
 }
 
-fn (msg &BasicGetOk) getContent() (properties, []u8) {
+fn (msg &BasicGetOk) getContent() (Properties, []u8) {
 	return msg.properties, msg.body
 }
 
-fn (mut msg BasicGetOk) setContent(props properties, body []u8) {
+fn (mut msg BasicGetOk) setContent(props Properties, body []u8) {
 	msg.properties = props 
 	msg.body = body
 }
 
-fn (msg *BasicGetOk) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicGetOk) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.deliveryTag); err != nil { return }
     
@@ -2150,7 +2150,7 @@ fn (msg *BasicGetOk) write(w io.Writer) {
     
     if msg.redelivered { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
      if err = writeShortstr(w, msg.exchange); err != nil { return }
      if err = writeShortstr(w, msg.routingKey); err != nil { return }
@@ -2162,16 +2162,16 @@ fn (msg *BasicGetOk) write(w io.Writer) {
 	return
 }
 
-fn (msg *BasicGetOk) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicGetOk) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.deliveryTag); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.redelivered = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.redelivered = (bits & (1 << 0) > 0)
     
   
      if msg.exchange, err = readShortstr(r); err != nil { return }
@@ -2191,15 +2191,15 @@ struct BasicGetEmpty {
 	
 }
 
-fn (msg *BasicGetEmpty) id() (u16, u16) {
+fn (msg BasicGetEmpty) id() (u16, u16) {
 	return 60, 72
 }
 
-fn (msg *BasicGetEmpty) wait() (bool) {
+fn (msg BasicGetEmpty) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicGetEmpty) write(w io.Writer) {
+fn (msg BasicGetEmpty) write(w io.Writer) {
 	
 	
      if err = writeShortstr(w, msg.reserved1); err != nil { return }
@@ -2208,9 +2208,9 @@ fn (msg *BasicGetEmpty) write(w io.Writer) {
 	return
 }
 
-fn (msg *BasicGetEmpty) read(r io.Reader) (err error) {
-
-
+fn (msg *BasicGetEmpty) read(r io.Reader) ? {
+	
+	
      if msg.reserved1, err = readShortstr(r); err != nil { return }
     
   
@@ -2225,16 +2225,16 @@ struct BasicAck {
 	
 }
 
-fn (msg *BasicAck) id() (u16, u16) {
+fn (msg BasicAck) id() (u16, u16) {
 	return 60, 80
 }
 
-fn (msg *BasicAck) wait() (bool) {
+fn (msg BasicAck) wait() (bool) {
 	return false
 }
 
-fn (msg *BasicAck) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicAck) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.deliveryTag); err != nil { return }
     
@@ -2242,21 +2242,21 @@ fn (msg *BasicAck) write(w io.Writer) {
     
     if msg.multiple { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *BasicAck) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicAck) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.deliveryTag); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.multiple = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.multiple = (bits & (1 << 0) > 0)
     
   
     return
@@ -2270,16 +2270,16 @@ struct BasicReject {
 	
 }
 
-fn (msg *BasicReject) id() (u16, u16) {
+fn (msg BasicReject) id() (u16, u16) {
 	return 60, 90
 }
 
-fn (msg *BasicReject) wait() (bool) {
+fn (msg BasicReject) wait() (bool) {
 	return false
 }
 
-fn (msg *BasicReject) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicReject) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.deliveryTag); err != nil { return }
     
@@ -2287,21 +2287,21 @@ fn (msg *BasicReject) write(w io.Writer) {
     
     if msg.requeue { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *BasicReject) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicReject) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.deliveryTag); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.requeue = (bits & (1 << 0) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.requeue = (bits & (1 << 0) > 0)
     
   
     return
@@ -2314,32 +2314,32 @@ struct BasicRecoverAsync {
 	
 }
 
-fn (msg *BasicRecoverAsync) id() (u16, u16) {
+fn (msg BasicRecoverAsync) id() (u16, u16) {
 	return 60, 100
 }
 
-fn (msg *BasicRecoverAsync) wait() (bool) {
+fn (msg BasicRecoverAsync) wait() (bool) {
 	return false
 }
 
-fn (msg *BasicRecoverAsync) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicRecoverAsync) write(w io.Writer) {
+	mut bits := u16(0)
 	
     
     if msg.requeue { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *BasicRecoverAsync) read(r io.Reader) (err error) {
-var bits u8
-
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.requeue = (bits & (1 << 0) > 0)
+fn (msg *BasicRecoverAsync) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.requeue = (bits & (1 << 0) > 0)
     
   
     return
@@ -2352,32 +2352,32 @@ struct BasicRecover {
 	
 }
 
-fn (msg *BasicRecover) id() (u16, u16) {
+fn (msg BasicRecover) id() (u16, u16) {
 	return 60, 110
 }
 
-fn (msg *BasicRecover) wait() (bool) {
+fn (msg BasicRecover) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicRecover) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicRecover) write(w io.Writer) {
+	mut bits := u16(0)
 	
     
     if msg.requeue { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *BasicRecover) read(r io.Reader) (err error) {
-var bits u8
-
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.requeue = (bits & (1 << 0) > 0)
+fn (msg *BasicRecover) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.requeue = (bits & (1 << 0) > 0)
     
   
     return
@@ -2389,23 +2389,23 @@ struct BasicRecoverOk {
 	
 }
 
-fn (msg *BasicRecoverOk) id() (u16, u16) {
+fn (msg BasicRecoverOk) id() (u16, u16) {
 	return 60, 111
 }
 
-fn (msg *BasicRecoverOk) wait() (bool) {
+fn (msg BasicRecoverOk) wait() (bool) {
 	return true
 }
 
-fn (msg *BasicRecoverOk) write(w io.Writer) {
+fn (msg BasicRecoverOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *BasicRecoverOk) read(r io.Reader) (err error) {
-
-
+fn (msg *BasicRecoverOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -2418,16 +2418,16 @@ struct BasicNack {
 	
 }
 
-fn (msg *BasicNack) id() (u16, u16) {
+fn (msg BasicNack) id() (u16, u16) {
 	return 60, 120
 }
 
-fn (msg *BasicNack) wait() (bool) {
+fn (msg BasicNack) wait() (bool) {
 	return false
 }
 
-fn (msg *BasicNack) write(w io.Writer) {
-	mut bits u8
+fn (msg BasicNack) write(w io.Writer) {
+	mut bits := u16(0)
 	
      if err = binary.Write(w, binary.BigEndian, msg.deliveryTag); err != nil { return }
     
@@ -2437,22 +2437,22 @@ fn (msg *BasicNack) write(w io.Writer) {
     
     if msg.requeue { bits |= 1 << 1 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *BasicNack) read(r io.Reader) (err error) {
-var bits u8
-
+fn (msg *BasicNack) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
      if err = binary.Read(r, binary.BigEndian, &msg.deliveryTag); err != nil { return }
     
   
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.multiple = (bits & (1 << 0) > 0)
-     msg.requeue = (bits & (1 << 1) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.multiple = (bits & (1 << 0) > 0)
+    msg.requeue = (bits & (1 << 1) > 0)
     
   
     return
@@ -2464,23 +2464,23 @@ struct TxSelect {
 	
 }
 
-fn (msg *TxSelect) id() (u16, u16) {
+fn (msg TxSelect) id() (u16, u16) {
 	return 90, 10
 }
 
-fn (msg *TxSelect) wait() (bool) {
+fn (msg TxSelect) wait() (bool) {
 	return true
 }
 
-fn (msg *TxSelect) write(w io.Writer) {
+fn (msg TxSelect) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *TxSelect) read(r io.Reader) (err error) {
-
-
+fn (msg *TxSelect) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -2490,23 +2490,23 @@ struct TxSelectOk {
 	
 }
 
-fn (msg *TxSelectOk) id() (u16, u16) {
+fn (msg TxSelectOk) id() (u16, u16) {
 	return 90, 11
 }
 
-fn (msg *TxSelectOk) wait() (bool) {
+fn (msg TxSelectOk) wait() (bool) {
 	return true
 }
 
-fn (msg *TxSelectOk) write(w io.Writer) {
+fn (msg TxSelectOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *TxSelectOk) read(r io.Reader) (err error) {
-
-
+fn (msg *TxSelectOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -2516,23 +2516,23 @@ struct TxCommit {
 	
 }
 
-fn (msg *TxCommit) id() (u16, u16) {
+fn (msg TxCommit) id() (u16, u16) {
 	return 90, 20
 }
 
-fn (msg *TxCommit) wait() (bool) {
+fn (msg TxCommit) wait() (bool) {
 	return true
 }
 
-fn (msg *TxCommit) write(w io.Writer) {
+fn (msg TxCommit) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *TxCommit) read(r io.Reader) (err error) {
-
-
+fn (msg *TxCommit) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -2542,23 +2542,23 @@ struct TxCommitOk {
 	
 }
 
-fn (msg *TxCommitOk) id() (u16, u16) {
+fn (msg TxCommitOk) id() (u16, u16) {
 	return 90, 21
 }
 
-fn (msg *TxCommitOk) wait() (bool) {
+fn (msg TxCommitOk) wait() (bool) {
 	return true
 }
 
-fn (msg *TxCommitOk) write(w io.Writer) {
+fn (msg TxCommitOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *TxCommitOk) read(r io.Reader) (err error) {
-
-
+fn (msg *TxCommitOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -2568,23 +2568,23 @@ struct TxRollback {
 	
 }
 
-fn (msg *TxRollback) id() (u16, u16) {
+fn (msg TxRollback) id() (u16, u16) {
 	return 90, 30
 }
 
-fn (msg *TxRollback) wait() (bool) {
+fn (msg TxRollback) wait() (bool) {
 	return true
 }
 
-fn (msg *TxRollback) write(w io.Writer) {
+fn (msg TxRollback) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *TxRollback) read(r io.Reader) (err error) {
-
-
+fn (msg *TxRollback) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -2594,23 +2594,23 @@ struct TxRollbackOk {
 	
 }
 
-fn (msg *TxRollbackOk) id() (u16, u16) {
+fn (msg TxRollbackOk) id() (u16, u16) {
 	return 90, 31
 }
 
-fn (msg *TxRollbackOk) wait() (bool) {
+fn (msg TxRollbackOk) wait() (bool) {
 	return true
 }
 
-fn (msg *TxRollbackOk) write(w io.Writer) {
+fn (msg TxRollbackOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *TxRollbackOk) read(r io.Reader) (err error) {
-
-
+fn (msg *TxRollbackOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
@@ -2621,32 +2621,32 @@ struct ConfirmSelect {
 	
 }
 
-fn (msg *ConfirmSelect) id() (u16, u16) {
+fn (msg ConfirmSelect) id() (u16, u16) {
 	return 85, 10
 }
 
-fn (msg *ConfirmSelect) wait() (bool) {
+fn (msg ConfirmSelect) wait() (bool) {
 	return true
 }
 
-fn (msg *ConfirmSelect) write(w io.Writer) {
-	mut bits u8
+fn (msg ConfirmSelect) write(w io.Writer) {
+	mut bits := u16(0)
 	
     
     if msg.nowait { bits |= 1 << 0 }
     
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   
 	return
 }
 
-fn (msg *ConfirmSelect) read(r io.Reader) (err error) {
-var bits u8
-
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-     msg.nowait = (bits & (1 << 0) > 0)
+fn (msg *ConfirmSelect) read(r io.Reader) ? {
+	mut bits := u16(0)
+	
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    msg.nowait = (bits & (1 << 0) > 0)
     
   
     return
@@ -2658,150 +2658,124 @@ struct ConfirmSelectOk {
 	
 }
 
-fn (msg *ConfirmSelectOk) id() (u16, u16) {
+fn (msg ConfirmSelectOk) id() (u16, u16) {
 	return 85, 11
 }
 
-fn (msg *ConfirmSelectOk) wait() (bool) {
+fn (msg ConfirmSelectOk) wait() (bool) {
 	return true
 }
 
-fn (msg *ConfirmSelectOk) write(w io.Writer) {
+fn (msg ConfirmSelectOk) write(w io.Writer) {
 	
 	
 	return
 }
 
-fn (msg *ConfirmSelectOk) read(r io.Reader) (err error) {
-
-
+fn (msg *ConfirmSelectOk) read(r io.Reader) ? {
+	
+	
     return
 }
 
-fn (r *reader) parseMethodFrame(channel uint16, size uint32) Frame? {
+fn (mut r VReader) parse_method_frame(channel u16, size u32) Frame? {
     mf := &MethodFrame {
-      channe;_id: channel,
+      channel_id: channel,
     }
-
-    if err = binary.Read(r.r, binary.BigEndian, &mf.ClassId); err != nil {
-      return
-    }
-
-    if err = binary.Read(r.r, binary.BigEndian, &mf.MethodId); err != nil {
-      return
-    }
+	mut buf := []u8{}
+	r.r.read(buf)
+	mf.class_id = binary.big_endian_u16(buf)
+	buf = []u8{}
+	r.r.read(buf)
+	mf.method_id = binary.big_endian_u16(buf)
 
 	match mf.class_id {
 		
 		
 		10 { // connection
-			match mf.MethodId { 
+			match mf.method_id { 
 				10 { // connection start
 					//fmt.Println("NextMethod: class:10 method:10")
 					method := &ConnectionStart{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				11 { // connection start-ok
 					//fmt.Println("NextMethod: class:10 method:11")
 					method := &ConnectionStartOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				20 { // connection secure
 					//fmt.Println("NextMethod: class:10 method:20")
 					method := &ConnectionSecure{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				21 { // connection secure-ok
 					//fmt.Println("NextMethod: class:10 method:21")
 					method := &ConnectionSecureOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				30 { // connection tune
 					//fmt.Println("NextMethod: class:10 method:30")
 					method := &ConnectionTune{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				31 { // connection tune-ok
 					//fmt.Println("NextMethod: class:10 method:31")
 					method := &ConnectionTuneOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				40 { // connection open
 					//fmt.Println("NextMethod: class:10 method:40")
 					method := &ConnectionOpen{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				41 { // connection open-ok
 					//fmt.Println("NextMethod: class:10 method:41")
 					method := &ConnectionOpenOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				50 { // connection close
 					//fmt.Println("NextMethod: class:10 method:50")
 					method := &ConnectionClose{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				51 { // connection close-ok
 					//fmt.Println("NextMethod: class:10 method:51")
 					method := &ConnectionCloseOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				60 { // connection blocked
 					//fmt.Println("NextMethod: class:10 method:60")
 					method := &ConnectionBlocked{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				61 { // connection unblocked
 					//fmt.Println("NextMethod: class:10 method:61")
 					method := &ConnectionUnblocked{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				else {
@@ -2812,59 +2786,47 @@ fn (r *reader) parseMethodFrame(channel uint16, size uint32) Frame? {
 		
 		
 		20 { // channel
-			match mf.MethodId { 
+			match mf.method_id { 
 				10 { // channel open
 					//fmt.Println("NextMethod: class:20 method:10")
 					method := &ChannelOpen{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				11 { // channel open-ok
 					//fmt.Println("NextMethod: class:20 method:11")
 					method := &ChannelOpenOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				20 { // channel flow
 					//fmt.Println("NextMethod: class:20 method:20")
 					method := &ChannelFlow{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				21 { // channel flow-ok
 					//fmt.Println("NextMethod: class:20 method:21")
 					method := &ChannelFlowOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				40 { // channel close
 					//fmt.Println("NextMethod: class:20 method:40")
 					method := &ChannelClose{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				41 { // channel close-ok
 					//fmt.Println("NextMethod: class:20 method:41")
 					method := &ChannelCloseOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				else {
@@ -2875,77 +2837,61 @@ fn (r *reader) parseMethodFrame(channel uint16, size uint32) Frame? {
 		
 		
 		40 { // exchange
-			match mf.MethodId { 
+			match mf.method_id { 
 				10 { // exchange declare
 					//fmt.Println("NextMethod: class:40 method:10")
 					method := &ExchangeDeclare{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				11 { // exchange declare-ok
 					//fmt.Println("NextMethod: class:40 method:11")
 					method := &ExchangeDeclareOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				20 { // exchange delete
 					//fmt.Println("NextMethod: class:40 method:20")
 					method := &ExchangeDelete{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				21 { // exchange delete-ok
 					//fmt.Println("NextMethod: class:40 method:21")
 					method := &ExchangeDeleteOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				30 { // exchange bind
 					//fmt.Println("NextMethod: class:40 method:30")
 					method := &ExchangeBind{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				31 { // exchange bind-ok
 					//fmt.Println("NextMethod: class:40 method:31")
 					method := &ExchangeBindOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				40 { // exchange unbind
 					//fmt.Println("NextMethod: class:40 method:40")
 					method := &ExchangeUnbind{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				51 { // exchange unbind-ok
 					//fmt.Println("NextMethod: class:40 method:51")
 					method := &ExchangeUnbindOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				else {
@@ -2956,95 +2902,75 @@ fn (r *reader) parseMethodFrame(channel uint16, size uint32) Frame? {
 		
 		
 		50 { // queue
-			match mf.MethodId { 
+			match mf.method_id { 
 				10 { // queue declare
 					//fmt.Println("NextMethod: class:50 method:10")
 					method := &QueueDeclare{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				11 { // queue declare-ok
 					//fmt.Println("NextMethod: class:50 method:11")
 					method := &QueueDeclareOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				20 { // queue bind
 					//fmt.Println("NextMethod: class:50 method:20")
 					method := &QueueBind{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				21 { // queue bind-ok
 					//fmt.Println("NextMethod: class:50 method:21")
 					method := &QueueBindOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				50 { // queue unbind
 					//fmt.Println("NextMethod: class:50 method:50")
 					method := &QueueUnbind{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				51 { // queue unbind-ok
 					//fmt.Println("NextMethod: class:50 method:51")
 					method := &QueueUnbindOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				30 { // queue purge
 					//fmt.Println("NextMethod: class:50 method:30")
 					method := &QueuePurge{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				31 { // queue purge-ok
 					//fmt.Println("NextMethod: class:50 method:31")
 					method := &QueuePurgeOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				40 { // queue delete
 					//fmt.Println("NextMethod: class:50 method:40")
 					method := &QueueDelete{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				41 { // queue delete-ok
 					//fmt.Println("NextMethod: class:50 method:41")
 					method := &QueueDeleteOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				else {
@@ -3055,167 +2981,131 @@ fn (r *reader) parseMethodFrame(channel uint16, size uint32) Frame? {
 		
 		
 		60 { // basic
-			match mf.MethodId { 
+			match mf.method_id { 
 				10 { // basic qos
 					//fmt.Println("NextMethod: class:60 method:10")
 					method := &BasicQos{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				11 { // basic qos-ok
 					//fmt.Println("NextMethod: class:60 method:11")
 					method := &BasicQosOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				20 { // basic consume
 					//fmt.Println("NextMethod: class:60 method:20")
 					method := &BasicConsume{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				21 { // basic consume-ok
 					//fmt.Println("NextMethod: class:60 method:21")
 					method := &BasicConsumeOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				30 { // basic cancel
 					//fmt.Println("NextMethod: class:60 method:30")
 					method := &BasicCancel{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				31 { // basic cancel-ok
 					//fmt.Println("NextMethod: class:60 method:31")
 					method := &BasicCancelOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				40 { // basic publish
 					//fmt.Println("NextMethod: class:60 method:40")
 					method := &BasicPublish{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				50 { // basic return
 					//fmt.Println("NextMethod: class:60 method:50")
 					method := &BasicReturn{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				60 { // basic deliver
 					//fmt.Println("NextMethod: class:60 method:60")
 					method := &BasicDeliver{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				70 { // basic get
 					//fmt.Println("NextMethod: class:60 method:70")
 					method := &BasicGet{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				71 { // basic get-ok
 					//fmt.Println("NextMethod: class:60 method:71")
 					method := &BasicGetOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				72 { // basic get-empty
 					//fmt.Println("NextMethod: class:60 method:72")
 					method := &BasicGetEmpty{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				80 { // basic ack
 					//fmt.Println("NextMethod: class:60 method:80")
 					method := &BasicAck{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				90 { // basic reject
 					//fmt.Println("NextMethod: class:60 method:90")
 					method := &BasicReject{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				100 { // basic recover-async
 					//fmt.Println("NextMethod: class:60 method:100")
 					method := &BasicRecoverAsync{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				110 { // basic recover
 					//fmt.Println("NextMethod: class:60 method:110")
 					method := &BasicRecover{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				111 { // basic recover-ok
 					//fmt.Println("NextMethod: class:60 method:111")
 					method := &BasicRecoverOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				120 { // basic nack
 					//fmt.Println("NextMethod: class:60 method:120")
 					method := &BasicNack{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				else {
@@ -3226,59 +3116,47 @@ fn (r *reader) parseMethodFrame(channel uint16, size uint32) Frame? {
 		
 		
 		90 { // tx
-			match mf.MethodId { 
+			match mf.method_id { 
 				10 { // tx select
 					//fmt.Println("NextMethod: class:90 method:10")
 					method := &TxSelect{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				11 { // tx select-ok
 					//fmt.Println("NextMethod: class:90 method:11")
 					method := &TxSelectOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				20 { // tx commit
 					//fmt.Println("NextMethod: class:90 method:20")
 					method := &TxCommit{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				21 { // tx commit-ok
 					//fmt.Println("NextMethod: class:90 method:21")
 					method := &TxCommitOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				30 { // tx rollback
 					//fmt.Println("NextMethod: class:90 method:30")
 					method := &TxRollback{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				31 { // tx rollback-ok
 					//fmt.Println("NextMethod: class:90 method:31")
 					method := &TxRollbackOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				else {
@@ -3289,23 +3167,19 @@ fn (r *reader) parseMethodFrame(channel uint16, size uint32) Frame? {
 		
 		
 		85 { // confirm
-			match mf.MethodId { 
+			match mf.method_id { 
 				10 { // confirm select
 					//fmt.Println("NextMethod: class:85 method:10")
 					method := &ConfirmSelect{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				11 { // confirm select-ok
 					//fmt.Println("NextMethod: class:85 method:11")
 					method := &ConfirmSelectOk{}
-					if err = method.read(r.r); err != nil {
-						return
-					}
-					mf.Method = method
+					method.read(r.r) or { return }
+					mf.method = method
 				}
 				
 				else {
@@ -3315,10 +3189,10 @@ fn (r *reader) parseMethodFrame(channel uint16, size uint32) Frame? {
 		}
 		
 		else {
-		  return nil, fmt.Errorf("Bad method frame, unknown class ${mf.class_id}")
+		  return error("Bad method frame, unknown class ${mf.class_id}")
 		}
 	}
-	return mf, nil
+	return mf
 }
 
 

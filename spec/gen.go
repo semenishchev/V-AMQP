@@ -182,47 +182,45 @@ struct {{$struct}} {
 	body []u8{{end}}
 }
 
-fn (msg *{{$struct}}) id() (u16, u16) {
+fn (msg {{$struct}}) id() (u16, u16) {
 	return {{$class.Index}}, {{$method.Index}}
 }
 
-fn (msg *{{$struct}}) wait() (bool) {
+fn (msg {{$struct}}) wait() (bool) {
 	return {{.Synchronous}}{{if $.HasField "NoWait" .}} && !msg.NoWait{{end}}
 }
 {{if .Content}}
-fn (msg &{{$struct}}) getContent() (properties, []u8) {
+fn (msg &{{$struct}}) getContent() (Properties, []u8) {
 	return msg.properties, msg.body
 }
 
-fn (mut msg {{$struct}}) setContent(props properties, body []u8) {
+fn (mut msg {{$struct}}) setContent(props Properties, body []u8) {
 	msg.properties = props 
 	msg.body = body
 }
 {{end}}
-fn (msg *{{$struct}}) write(w io.Writer) {
-	{{if $.HasType "bit" $method}}mut bits u8{{end}}
+fn (msg {{$struct}}) write(w io.Writer) {
+	{{if $.HasType "bit" $method}}mut bits := u16(0){{end}}
 	{{.Fields | $.Fieldsets | $.Partial "enc-"}}
 	return
 }
 
-fn (msg *{{$struct}}) read(r io.Reader) (err error) {
-{{if $.HasType "bit" $method}}var bits u8{{end}}
-{{.Fields | $.Fieldsets | $.Partial "dec-"}}
+fn (msg *{{$struct}}) read(r io.Reader) ? {
+	{{if $.HasType "bit" $method}}mut bits := u16(0){{end}}
+	{{.Fields | $.Fieldsets | $.Partial "dec-"}}
     return
 }
 {{end}}{{end}}
-fn (r *reader) parse_method_frame(channel u16, size u32) Frame? {
+fn (mut r VReader) parse_method_frame(channel u16, size u32) Frame? {
     mf := &MethodFrame {
       channel_id: channel,
     }
-
-    if err = binary.Read(r.r, binary.BigEndian, &mf.ClassId); err != nil {
-      return
-    }
-
-    if err = binary.Read(r.r, binary.BigEndian, &mf.MethodId); err != nil {
-      return
-    }
+	mut buf := []u8{}
+	r.r.read(buf)
+	mf.class_id = binary.big_endian_u16(buf)
+	buf = []u8{}
+	r.r.read(buf)
+	mf.method_id = binary.big_endian_u16(buf)
 
 	match mf.class_id {
 		{{range .Classes}}
@@ -254,7 +252,7 @@ fn (r *reader) parse_method_frame(channel u16, size u32) Frame? {
     {{range $off, $field := .Fields}}
     if msg.{{$field | $.FieldName}} { bits |= 1 << {{$off}} }
     {{end}}
-    if err = binary.Write(w, binary.BigEndian, bits); err != nil { return }
+	binary.big_endian_put_u16(w, u16(bits))
   {{end}}
   {{define "enc-octet"}}
     {{range .Fields}} if err = binary.Write(w, binary.BigEndian, msg.{{. | $.FieldName}}); err != nil { return }
@@ -294,10 +292,10 @@ fn (r *reader) parse_method_frame(channel u16, size u32) Frame? {
   {{end}}
 
   {{define "dec-bit"}}
-    if err = binary.Read(r, binary.BigEndian, &bits); err != nil {
-      return
-    }
-    {{range $off, $field := .Fields}} msg.{{$field | $.FieldName}} = (bits & (1 << {{$off}}) > 0)
+	mut buf := []u8{}
+	r.r.read(buf)
+    bits = binary.big_endian_u16(buf)
+    {{range $off, $field := .Fields}}msg.{{$field | $.FieldName}} = (bits & (1 << {{$off}}) > 0)
     {{end}}
   {{end}}
   {{define "dec-octet"}}
