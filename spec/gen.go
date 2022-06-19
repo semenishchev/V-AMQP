@@ -142,85 +142,78 @@ var (
 		"clean":   clean,
 	}
 
-	packageTemplate = template.Must(template.New("package").Funcs(helpers).Parse(`
-	// Copyright (c) 2021 VMware, Inc. or its affiliates. All Rights Reserved.
-	// Copyright (c) 2012-2021, Sean Treadway, SoundCloud Ltd.
-	// Use of this source code is governed by a BSD-style
-	// license that can be found in the LICENSE file.
+	packageTemplate = template.Must(template.New("package").Funcs(helpers).Parse(
+`
+// Copyright (c) 2021 VMware, Inc. or its affiliates. All Rights Reserved.
+// Copyright (c) 2012-2021, Sean Treadway, SoundCloud Ltd.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
-  /* GENERATED FILE - DO NOT EDIT */
-  /* Rebuild from the spec/gen.go tool */
+/* GENERATED FILE - DO NOT EDIT */
+/* Rebuild from the spec/gen.go tool */
 
-  {{with .Root}}
-  module vamqp
-  import encoding.binary
-  import io
+{{with .Root}}
+module vamqp
+import encoding.binary
+import io
 
-	// Error codes that can be sent from the server during a connection or
-	// channel exception or used by the client to indicate a class of error like
-	// ErrCredentials.  The text of the error is likely more interesting than
-	// these constants.
-	const (
-	{{range $c := .Constants}}
-	{{if $c.IsError}}{{.Name | public}}{{else}}{{.Name | private}}{{end}} = {{.Value}}{{end}}
-  )
+// Error codes that can be sent from the server during a connection or
+// channel exception or used by the client to indicate a class of error like
+// ErrCredentials.  The text of the error is likely more interesting than
+// these constants.
+const ( {{range $c := .Constants}}
+	{{.Name | private}} = {{.Value}}{{end}} 
+)
 
-	func is_soft_exception_code(code int) bool {
-		match code {
+fn is_soft_exception_code(code int) bool {
+	match code {
 		{{range $c := .Constants}} {{if $c.IsSoftError}} {{$c.Value}} {
 			return true
 		}{{end}}{{end}}
-		}
-		return false
 	}
+	return false
+}
+{{range .Classes}}{{$class := .}}{{range .Methods}}{{$method := .}}{{$struct := $.StructName $class.Name $method.Name}}{{if .Docs}}/* {{range .Docs}} {{.Body | clean}} {{end}} */{{end}}
+struct {{$struct}} {
+	mut:
+	{{range .Fields}}
+	{{$.FieldName .}} {{$.FieldType . | $.NativeType}} {{if .Label}}// {{.Label}}{{end}}{{end}}
+	{{if .Content}}Properties properties
+	body []u8{{end}}
+}
 
-  {{range .Classes}}
-    {{$class := .}}
-    {{range .Methods}}
-      {{$method := .}}
-			{{$struct := $.StructName $class.Name $method.Name}}
-      {{if .Docs}}/* {{range .Docs}} {{.Body | clean}} {{end}} */{{end}}
-      type {{$struct}} struct {
-        {{range .Fields}}
-        {{$.FieldName .}} {{$.FieldType . | $.NativeType}} {{if .Label}}// {{.Label}}{{end}}{{end}}
-				{{if .Content}}Properties properties
-				Body []byte{{end}}
-      }
+fn (msg *{{$struct}}) id() (u16, u16) {
+	return {{$class.Index}}, {{$method.Index}}
+}
 
-			func (msg *{{$struct}}) id() (uint16, uint16) {
-				return {{$class.Index}}, {{$method.Index}}
-			}
+fn (msg *{{$struct}}) wait() (bool) {
+	return {{.Synchronous}}{{if $.HasField "NoWait" .}} && !msg.NoWait{{end}}
+}
+{{if .Content}}
+fn (msg &{{$struct}}) getContent() (properties, []u8) {
+	return msg.properties, msg.body
+}
 
-			func (msg *{{$struct}}) wait() (bool) {
-				return {{.Synchronous}}{{if $.HasField "NoWait" .}} && !msg.NoWait{{end}}
-			}
+fn (mut msg {{$struct}}) setContent(props properties, body []u8) {
+	msg.properties = props 
+	msg.body = body
+}
+{{end}}
+fn (msg *{{$struct}}) write(w io.Writer) {
+	{{if $.HasType "bit" $method}}mut bits u8{{end}}
+	{{.Fields | $.Fieldsets | $.Partial "enc-"}}
+	return
+}
 
-			{{if .Content}}
-      func (msg *{{$struct}}) getContent() (properties, []byte) {
-        return msg.Properties, msg.Body
-      }
-
-      func (msg *{{$struct}}) setContent(props properties, body []byte) {
-        msg.Properties, msg.Body = props, body
-      }
-			{{end}}
-      func (msg *{{$struct}}) write(w io.Writer) (err error) {
-				{{if $.HasType "bit" $method}}var bits byte{{end}}
-        {{.Fields | $.Fieldsets | $.Partial "enc-"}}
-        return
-      }
-
-      func (msg *{{$struct}}) read(r io.Reader) (err error) {
-				{{if $.HasType "bit" $method}}var bits byte{{end}}
-        {{.Fields | $.Fieldsets | $.Partial "dec-"}}
-        return
-      }
-    {{end}}
-  {{end}}
-
-  func (r *reader) parseMethodFrame(channel uint16, size uint32) (f frame, err error) {
-    mf := &methodFrame {
-      ChannelId: channel,
+fn (msg *{{$struct}}) read(r io.Reader) (err error) {
+{{if $.HasType "bit" $method}}var bits u8{{end}}
+{{.Fields | $.Fieldsets | $.Partial "dec-"}}
+    return
+}
+{{end}}{{end}}
+fn (r *reader) parse_method_frame(channel u16, size u32) Frame? {
+    mf := &MethodFrame {
+      channel_id: channel,
     }
 
     if err = binary.Read(r.r, binary.BigEndian, &mf.ClassId); err != nil {
@@ -231,31 +224,31 @@ var (
       return
     }
 
-    switch mf.ClassId {
-    {{range .Classes}}
-    {{$class := .}}
-    case {{.Index}}: // {{.Name}}
-      switch mf.MethodId {
-      {{range .Methods}}
-      case {{.Index}}: // {{$class.Name}} {{.Name}}
-        //fmt.Println("NextMethod: class:{{$class.Index}} method:{{.Index}}")
-        method := &{{$.StructName $class.Name .Name}}{}
-        if err = method.read(r.r); err != nil {
-          return
-        }
-        mf.Method = method
-      {{end}}
-      default:
-        return nil, fmt.Errorf("Bad method frame, unknown method %d for class %d", mf.MethodId, mf.ClassId)
-      }
-    {{end}}
-    default:
-      return nil, fmt.Errorf("Bad method frame, unknown class %d", mf.ClassId)
-    }
-
-    return mf, nil
-  }
-  {{end}}
+	match mf.class_id {
+		{{range .Classes}}
+		{{$class := .}}
+		{{.Index}} { // {{.Name}}
+			match mf.method_id { {{range .Methods}}
+				{{.Index}} { // {{$class.Name}} {{.Name}}
+					//fmt.Println("NextMethod: class:{{$class.Index}} method:{{.Index}}")
+					method := &{{$.StructName $class.Name .Name}}{}
+					method.read(r.r) or { return }
+					mf.method = method
+				}
+				{{end}}
+				else {
+					return error("Bad method frame, unknown method ${mf.method_id} for class ${mf.class_id}")
+				}
+			}
+		}
+		{{end}}
+		else {
+		  return error("Bad method frame, unknown class ${mf.class_id}")
+		}
+	}
+	return mf
+}
+{{end}}
 
   {{define "enc-bit"}}
     {{range $off, $field := .Fields}}
@@ -481,7 +474,11 @@ func (renderer *renderer) Tag(d Domain) string {
 }
 
 func (renderer *renderer) StructName(parts ...string) string {
-	return parts[0] + public(parts[1:]...)
+	var res string
+	for _, in := range parts {
+		res += strings.Title(in)
+	}
+	return strings.Replace(res, "-", "", -1)
 }
 
 func clean(body string) (res string) {
@@ -489,7 +486,7 @@ func clean(body string) (res string) {
 }
 
 func private(parts ...string) string {
-	return export(regexp.MustCompile(`[-_]\w`), parts...)
+	return export(regexp.MustCompile(`[-_]`), parts...)
 }
 
 func public(parts ...string) string {
@@ -502,7 +499,7 @@ func export(delim *regexp.Regexp, parts ...string) (res string) {
 		res += delim.ReplaceAllStringFunc(in, func(match string) string {
 			switch len(match) {
 			case 1:
-				return strings.ToUpper(match)
+				return strings.Replace(match, "-", "_", -1)
 			case 2:
 				return strings.ToUpper(match[1:])
 			}
@@ -529,7 +526,7 @@ func main() {
 		log.Fatalln("Could not parse XML:", err)
 	}
 
-	f, err := os.Create("spec_gen.go")
+	f, err := os.Create("spec_gen.v")
 
 	w := bufio.NewWriter(f)
 
