@@ -46,7 +46,7 @@ struct Connection {
 	properties Table    // Server properties
 	locales    []string // Server locales
 
-	closed int // Will be 1 if the connection is closed, 0 otherwise. Should only be accessed as atomic
+	closed u8 // Will be 1 if the connection is closed, 0 otherwise. Should only be accessed as atomic
 }
 
 interface ReadDeadliner {
